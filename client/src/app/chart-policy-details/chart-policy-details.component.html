@@ -1,0 +1,22 @@
+<div class="mt-3 ml-3" ngbDropdown>
+  <button class="btn btn-sm btn-outline-primary" id="filterDropDownButton" ngbDropdownToggle type="button">
+    {{selectedRegion}}
+  </button>
+  <div aria-labelledby="filterDropDownButton" ngbDropdownMenu>
+    <ng-container *ngFor="let region of regions">
+      <button (click)="filterRegion(region)" ngbDropdownItem>{{ region }}</button>
+    </ng-container>
+  </div>
+</div>
+<div class="chart mt-3">
+  <canvas baseChart
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [plugins]="barChartPlugins"
+          [legend]="barChartLegend"
+          [chartType]="barChartType"
+          [colors]="barChartColors"
+  >
+  </canvas>
+</div>

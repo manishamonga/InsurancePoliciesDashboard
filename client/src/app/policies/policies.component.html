@@ -1,0 +1,128 @@
+<div class='mt-5 ml-4 mr-4'>
+  <ng-container >
+    <div class="mb-4">
+      <form [formGroup]="myForm" class="form-inline" (keydown.enter)="$event.preventDefault()">
+        <div class="input-group input-group-sm" ngbDropdown>
+          <div class="input-group-prepend">
+            <button
+              class="btn btn-sm btn-outline-primary"
+              id="filterDropDown"
+              ngbDropdownToggle
+              type="button"
+            >
+            </button>
+            <div aria-labelledby="filterDropDown" ngbDropdownMenu>
+              <label>Select</label>
+              <div class="dropdown-divider"></div>
+              <ng-container *ngFor="let filter of filterBy">
+                <button (click)="onFilter(filter)" ngbDropdownItem>
+                      <span *ngIf="filter == selectedFilter" class="checkedFilter"
+                      ><i class="pbi-icon-mini pbi-check"></i
+                      ></span>
+                  {{ filter }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+          <input
+            [formControl]="searchInput"
+            aria-describedby="searchByPolicyID"
+            aria-label="Filter by Policy ID "
+            class="form-control"
+            placeholder="{{ selectedFilter ? selectedFilter : 'Select filter field' }}"
+            type="text"
+          />
+        </div>
+      </form>
+    </div>
+    <p-table [columns]="cols" [value]="policies" selectionMode="single" [(selection)]="selectedPolicy" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns"
+              [pSortableColumnDisabled]="!col.sortable"
+              [pSortableColumn]="col.field" >
+            {{col.header}}
+            <ng-container *ngIf="col.sortable">
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </ng-container>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-policies let-columns="columns">
+        <tr [pSelectableRow]="policies">
+          <td *ngFor="let col of columns">
+            {{policies[col.field]}}
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template let-columns pTemplate="emptymessage">
+        <tr *ngIf="policies?.length === 0 && searchInput.value">
+          <td [attr.colspan]="columns.length + 1" class="text-center">
+            <div class="empty-state empty-state-search">
+              <div aria-hidden="true" class="empty-state-icon"></div>
+              <div class="empty-state-head">No matches found</div>
+              <p>
+                Nothing matches your filter: <b>{{ searchInput.value }}</b>
+              </p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+
+    <p-dialog header="Customer Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="500">
+      <div class="ui-g ui-fluid" *ngIf="policy">
+        <div class="ui-g-12">
+          <div class="ui-g-4">
+            <label for="policyId">Policy Id</label>
+          </div>
+          <div class="ui-g-8">
+            <input pInputText id="policyId" [(ngModel)]="policy.policyId" disabled />
+          </div>
+        </div>
+        <div class="ui-g-12">
+          <div class="ui-g-4">
+            <label for="customerId">Customer ID</label>
+          </div>
+          <div class="ui-g-8">
+            <input pInputText id="customerId" [(ngModel)]="policy.customerId" disabled />
+          </div>
+        </div>
+        <div class="ui-g-12">
+          <div class="ui-g-4">
+            <label for="premium">Premium</label>
+          </div>
+          <div class="ui-g-8">
+            <input pInputText id="premium" [(ngModel)]="policy.premium" />
+          </div>
+        </div>
+        <div class="ui-g-12">
+          <div class="ui-g-4">
+            <label for="region">Region</label>
+          </div>
+          <div class="ui-g-8">
+            <input pInputText id="region" [(ngModel)]="policy.region" disabled />
+          </div>
+        </div>
+        <div class="ui-g-12">
+          <div class="ui-g-4">
+            <label for="gender">Gender</label>
+          </div>
+          <div class="ui-g-8">
+            <input pInputText id="gender" [(ngModel)]="policy.gender" disabled />
+          </div>
+        </div>
+      </div>
+      <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button type="button" pButton icon="fa fa-check" (click)="save(policy)" label="Save">Save</button>
+        </div>
+      </p-footer>
+    </p-dialog>
+  </ng-container>
+<div class="mb-5"></div>
+</div>
+
+
